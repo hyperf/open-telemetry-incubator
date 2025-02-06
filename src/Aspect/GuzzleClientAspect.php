@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Aspect;
+namespace Hyperf\OpenTelemetry\Aspect;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
 use Hyperf\Stringable\Str;
-use HyperfContrib\OpenTelemetry\Propagator\HeadersPropagator;
+use Hyperf\OpenTelemetry\Propagator\HeadersPropagator;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;

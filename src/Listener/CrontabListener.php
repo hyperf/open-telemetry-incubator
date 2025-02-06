@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Listener;
+namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Crontab\Event\AfterExecute;
 use Hyperf\Event\Contract\ListenerInterface;

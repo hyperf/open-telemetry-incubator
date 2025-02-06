@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Factory;
+namespace Hyperf\OpenTelemetry\Factory;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;

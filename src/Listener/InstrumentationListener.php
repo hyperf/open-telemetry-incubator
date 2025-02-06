@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Listener;
+namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
-use HyperfContrib\OpenTelemetry\Concerns\SpanRecordThrowable;
-use HyperfContrib\OpenTelemetry\Switcher;
+use Hyperf\OpenTelemetry\Concerns\SpanRecordThrowable;
+use Hyperf\OpenTelemetry\Switcher;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 
 /**
  * Class InstrumentationListener.
  *
- * @package HyperfContrib\OpenTelemetry\Listener
+ * @package Hyperf\OpenTelemetry\Listener
  * @property-read ConfigInterface $config
  * @property-read ContainerInterface $container
  * @property-read CachedInstrumentation $instrumentation

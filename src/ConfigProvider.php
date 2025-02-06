@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry;
+namespace Hyperf\OpenTelemetry;
 
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\SDK\Resource\ResourceInfo;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Listener;
+namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Collection\Arr;
 use Hyperf\Database\Events\QueryExecuted;

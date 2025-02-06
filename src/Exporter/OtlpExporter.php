@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Exporter;
+namespace Hyperf\OpenTelemetry\Exporter;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
-use HyperfContrib\OpenTelemetry\Contract\ExporterInterface;
+use Hyperf\OpenTelemetry\Contract\ExporterInterface;
 use OpenTelemetry\API\Common\Time\Clock;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\Contrib\Otlp\LogsExporter;

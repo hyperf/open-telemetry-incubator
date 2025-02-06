@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Propagator;
+namespace Hyperf\OpenTelemetry\Propagator;
 
 use function assert;
 use OpenTelemetry\Context\Propagation\PropagationSetterInterface;

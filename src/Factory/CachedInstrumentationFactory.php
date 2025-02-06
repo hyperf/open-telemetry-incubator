@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Factory;
+namespace Hyperf\OpenTelemetry\Factory;
 
 use Hyperf\Contract\ContainerInterface;
-use HyperfContrib\OpenTelemetry\Contract\ExporterInterface;
+use Hyperf\OpenTelemetry\Contract\ExporterInterface;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\Context\ContextStorage;

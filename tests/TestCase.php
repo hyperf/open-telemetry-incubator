@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Tests;
+namespace Hyperf\OpenTelemetry\Tests;
 
 use ArrayObject;
 use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Testing\Concerns\RunTestsInCoroutine;
-use HyperfContrib\OpenTelemetry\Switcher;
+use Hyperf\OpenTelemetry\Switcher;
 use Mockery;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Instrumentation\Configurator;

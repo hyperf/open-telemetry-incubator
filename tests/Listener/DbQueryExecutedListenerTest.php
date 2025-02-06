@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Tests\Listener;
+namespace Hyperf\OpenTelemetry\Tests\Listener;
 
 use Hyperf\Database\Connection;
 use Hyperf\Database\Events\QueryExecuted;
-use HyperfContrib\OpenTelemetry\Listener\DbQueryExecutedListener;
-use HyperfContrib\OpenTelemetry\Switcher;
-use HyperfContrib\OpenTelemetry\Tests\TestCase;
+use Hyperf\OpenTelemetry\Listener\DbQueryExecutedListener;
+use Hyperf\OpenTelemetry\Switcher;
+use Hyperf\OpenTelemetry\Tests\TestCase;
 use Mockery;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;

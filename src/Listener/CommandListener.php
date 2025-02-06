@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Listener;
+namespace Hyperf\OpenTelemetry\Listener;
 
 use Carbon\Carbon;
 use Hyperf\Command\Event\AfterExecute;

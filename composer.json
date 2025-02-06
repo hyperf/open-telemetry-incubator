@@ -1,5 +1,5 @@
 {
-  "name": "hyperf-contrib/open-telemetry",
+  "name": "hyperf/open-telemetry-incubator",
   "description": "OpenTelemetry component for Hyperf",
   "type": "library",
   "require": {
@@ -18,15 +18,25 @@
     "open-telemetry/sdk": "^1.1",
     "open-telemetry/sem-conv": "^1.27"
   },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.64",
+    "hyperf/config": "~3.1.0",
+    "hyperf/testing": "^3.1",
+    "mockery/mockery": "^1.6",
+    "pestphp/pest": "^2.36",
+    "phpstan/phpstan": "^1.12",
+    "phpstan/phpstan-mockery": "^1.1",
+    "swoole/ide-helper": "^5.1"
+  },
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "HyperfContrib\\OpenTelemetry\\": "src/"
+      "Hyperf\\OpenTelemetry\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "HyperfContrib\\OpenTelemetry\\Tests\\": "tests/"
+      "Hyperf\\OpenTelemetry\\Tests\\": "tests/"
     }
   },
   "authors": [
@@ -37,8 +47,13 @@
   ],
   "extra": {
     "hyperf": {
-      "config": "HyperfContrib\\OpenTelemetry\\ConfigProvider"
+      "config": "Hyperf\\OpenTelemetry\\ConfigProvider"
     }
+  },
+  "scripts": {
+    "cs-fix": "php-cs-fixer fix $1",
+    "test": "./vendor/bin/pest --color=always",
+    "phpstan": "phpstan analyse --memory-limit=-1"
   },
   "config": {
     "sort-packages": true,

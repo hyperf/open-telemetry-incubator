@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HyperfContrib\OpenTelemetry\Contract;
+namespace Hyperf\OpenTelemetry\Contract;
 
 interface ExporterInterface
 {
