@@ -32,7 +32,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Run PHPStan
-        run: composer phpstan
+        run: composer analyse
 
       - name: Run Tests
         run: composer test
