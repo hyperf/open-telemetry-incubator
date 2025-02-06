@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Tests\Listener;
 
@@ -14,18 +22,24 @@ use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SDK\Trace\ImmutableSpan;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class ClientRequestListenerTest extends TestCase
 {
     /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function test_listen(): void
+    public function testListen(): void
     {
         $container = $this->getContainer($this->getConfig());
 
@@ -58,7 +72,7 @@ class ClientRequestListenerTest extends TestCase
         $this->assertCount(1, $this->storage);
 
         /** @var ImmutableSpan $span */
-        $span       = $this->storage[0];
+        $span = $this->storage[0];
         $attributes = $span->getAttributes();
 
         $this->assertSame('GET /path', $span->getName());
@@ -89,20 +103,20 @@ class ClientRequestListenerTest extends TestCase
     {
         $request = Mockery::mock(ServerRequestInterface::class, [
             'getMethod' => 'GET',
-            'getUri'    => Mockery::mock(UriInterface::class, [
-                'getScheme'  => 'http',
-                'getHost'    => 'localhost',
-                'getPort'    => 80,
-                'getPath'    => '/path',
-                'getQuery'   => 'field1=value1&field2=value2',
+            'getUri' => Mockery::mock(UriInterface::class, [
+                'getScheme' => 'http',
+                'getHost' => 'localhost',
+                'getPort' => 80,
+                'getPath' => '/path',
+                'getQuery' => 'field1=value1&field2=value2',
                 '__toString' => 'http://localhost:80/path?field1=value1&field2=value2',
             ]),
             'getServerParams' => ['remote_addr' => '1.1.1.1'],
-            'getHeaders'      => [
-                'User-Agent'       => 'testing',
-                'X-Custom-Header'  => 'x-custom',
+            'getHeaders' => [
+                'User-Agent' => 'testing',
+                'X-Custom-Header' => 'x-custom',
                 'X-Custom-Header1' => ['x-custom1'],
-                'Illegal-Header'   => 'illegal',
+                'Illegal-Header' => 'illegal',
             ],
         ]);
 
@@ -116,14 +130,14 @@ class ClientRequestListenerTest extends TestCase
     {
         return Mockery::mock(ResponseInterface::class, [
             'getStatusCode' => 200,
-            'getBody'       => Mockery::mock(StreamInterface::class, [
+            'getBody' => Mockery::mock(StreamInterface::class, [
                 'getSize' => 100,
             ]),
             'getHeaders' => [
-                'Content-Type'     => ['application/json'],
-                'X-Custom-Header'  => 'x-custom',
+                'Content-Type' => ['application/json'],
+                'X-Custom-Header' => 'x-custom',
                 'X-Custom-Header1' => ['x-custom1'],
-                'Illegal-Header'   => 'illegal',
+                'Illegal-Header' => 'illegal',
             ],
         ]);
     }
@@ -136,13 +150,13 @@ class ClientRequestListenerTest extends TestCase
         return [
             'open-telemetry' => [
                 'instrumentation' => [
-                    'enabled'  => true,
-                    'tracing'  => true,
+                    'enabled' => true,
+                    'tracing' => true,
                     'features' => [
                         'client_request' => ['enabled' => true, 'options' => [
                             'headers' => [
-                                'request'  => ['User-Agent', 'x-custom-*',],
-                                'response' => ['Content-Type', 'x-custom-*',],
+                                'request' => ['User-Agent', 'x-custom-*'],
+                                'response' => ['Content-Type', 'x-custom-*'],
                             ],
                         ]],
                     ],

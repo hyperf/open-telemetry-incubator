@@ -1,15 +1,25 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Aspect;
 
 use Hyperf\Di\Aop\ProceedingJoinPoint;
+use Hyperf\Di\Exception\Exception;
 use Hyperf\Redis\Redis;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
+use Throwable;
 
 class RedisAspect extends AbstractAspect
 {
@@ -18,8 +28,8 @@ class RedisAspect extends AbstractAspect
     ];
 
     /**
-     * @throws \Hyperf\Di\Exception\Exception
-     * @throws \Throwable
+     * @throws Exception
+     * @throws Throwable
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
@@ -27,10 +37,10 @@ class RedisAspect extends AbstractAspect
             return $proceedingJoinPoint->process();
         }
 
-        $args        = $proceedingJoinPoint->arguments['keys'];
-        $command     = Str::lower($args['name']);
+        $args = $proceedingJoinPoint->arguments['keys'];
+        $command = Str::lower($args['name']);
         $commandFull = $command . ' ' . $this->buildCommandArguments($args['arguments']);
-        $poolName    = (fn () => $this->poolName ?? 'default')->call($proceedingJoinPoint->getInstance());
+        $poolName = (fn () => $this->poolName ?? 'default')->call($proceedingJoinPoint->getInstance());
 
         $span = $this->instrumentation->tracer()->spanBuilder($command)
             ->setSpanKind(SpanKind::KIND_CLIENT)
@@ -38,17 +48,17 @@ class RedisAspect extends AbstractAspect
 
         // todo: add more attributes
         $span->setAttributes([
-            TraceAttributes::DB_SYSTEM         => 'redis',
+            TraceAttributes::DB_SYSTEM => 'redis',
             TraceAttributes::DB_OPERATION_NAME => Str::upper($command),
-            TraceAttributes::DB_QUERY_TEXT     => $commandFull,
-            TraceAttributes::DB_STATEMENT      => $commandFull,
-            'hyperf.redis.pool'                => $poolName,
+            TraceAttributes::DB_QUERY_TEXT => $commandFull,
+            TraceAttributes::DB_STATEMENT => $commandFull,
+            'hyperf.redis.pool' => $poolName,
         ]);
 
         try {
             $result = $proceedingJoinPoint->process();
             $span->setStatus(StatusCode::STATUS_OK);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->spanRecordException($span, $e);
 
             throw $e;
@@ -61,9 +71,6 @@ class RedisAspect extends AbstractAspect
 
     /**
      * Build the command arguments.
-     *
-     * @param array $args
-     * @return string
      */
     private function buildCommandArguments(array $args): string
     {
@@ -72,7 +79,7 @@ class RedisAspect extends AbstractAspect
             foreach ($args as $arg) {
                 if (is_array($arg)) {
                     $result .= $callback($arg);
-                } elseif (!is_object($arg)) { // fix: redis subscribe command
+                } elseif (! is_object($arg)) { // fix: redis subscribe command
                     $result .= $arg . ' ';
                 }
             }

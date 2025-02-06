@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Concerns;
 
@@ -13,10 +21,6 @@ trait SpanRecordThrowable
 {
     /**
      * Record exception to span.
-     *
-     * @param SpanInterface $span
-     * @param ?Throwable $e
-     * @return void
      */
     protected function spanRecordException(SpanInterface $span, ?Throwable $e = null): void
     {
@@ -25,11 +29,11 @@ trait SpanRecordThrowable
         }
 
         $span->setAttributes([
-            TraceAttributes::EXCEPTION_TYPE       => get_class($e),
-            TraceAttributes::EXCEPTION_MESSAGE    => $e->getMessage(),
+            TraceAttributes::EXCEPTION_TYPE => get_class($e),
+            TraceAttributes::EXCEPTION_MESSAGE => $e->getMessage(),
             TraceAttributes::EXCEPTION_STACKTRACE => $e->getTraceAsString(),
-            TraceAttributes::CODE_FUNCTION        => $e->getFile() . ':' . $e->getLine(),
-            TraceAttributes::CODE_LINENO          => $e->getLine(),
+            TraceAttributes::CODE_FUNCTION => $e->getFile() . ':' . $e->getLine(),
+            TraceAttributes::CODE_LINENO => $e->getLine(),
         ]);
         $span->setStatus(StatusCode::STATUS_ERROR, $e->getMessage());
         $span->recordException($e);

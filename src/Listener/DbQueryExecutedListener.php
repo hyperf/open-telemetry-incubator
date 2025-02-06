@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Listener;
 
@@ -10,6 +18,7 @@ use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SemConv\TraceAttributes;
+use Throwable;
 
 class DbQueryExecutedListener extends InstrumentationListener implements ListenerInterface
 {
@@ -24,13 +33,13 @@ class DbQueryExecutedListener extends InstrumentationListener implements Listene
     {
         match ($event::class) {
             QueryExecuted::class => $this->onQueryExecuted($event),
-            default              => null,
+            default => null,
         };
     }
 
     protected function onQueryExecuted(QueryExecuted $event): void
     {
-        if (!$this->switcher->isTracingEnabled('db_query')) {
+        if (! $this->switcher->isTracingEnabled('db_query')) {
             return;
         }
 
@@ -48,17 +57,17 @@ class DbQueryExecutedListener extends InstrumentationListener implements Listene
             ->startSpan();
 
         $span->setAttributes([
-            TraceAttributes::DB_SYSTEM         => $event->connection->getDriverName(),
-            TraceAttributes::DB_NAMESPACE      => $event->connection->getDatabaseName(),
+            TraceAttributes::DB_SYSTEM => $event->connection->getDriverName(),
+            TraceAttributes::DB_NAMESPACE => $event->connection->getDatabaseName(),
             TraceAttributes::DB_OPERATION_NAME => Str::upper(Str::before($event->sql, ' ')),
-            TraceAttributes::DB_USER           => $event->connection->getConfig('username'),
-            TraceAttributes::DB_QUERY_TEXT     => $sql,
-            TraceAttributes::DB_STATEMENT      => $sql,
-            TraceAttributes::SERVER_ADDRESS    => $event->connection->getConfig('host'),
-            TraceAttributes::SERVER_PORT       => $event->connection->getConfig('port'),
+            TraceAttributes::DB_USER => $event->connection->getConfig('username'),
+            TraceAttributes::DB_QUERY_TEXT => $sql,
+            TraceAttributes::DB_STATEMENT => $sql,
+            TraceAttributes::SERVER_ADDRESS => $event->connection->getConfig('host'),
+            TraceAttributes::SERVER_PORT => $event->connection->getConfig('port'),
         ]);
 
-        if ($event->result instanceof \Throwable) {
+        if ($event->result instanceof Throwable) {
             $this->spanRecordException($span, $event->result);
         }
 
@@ -68,7 +77,7 @@ class DbQueryExecutedListener extends InstrumentationListener implements Listene
     protected function combineSqlAndBindings(QueryExecuted $event): string
     {
         $sql = $event->sql;
-        if (!Arr::isAssoc($event->bindings)) {
+        if (! Arr::isAssoc($event->bindings)) {
             foreach ($event->bindings as $value) {
                 $sql = Str::replaceFirst('?', "'{$value}'", $sql);
             }

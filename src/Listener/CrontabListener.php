@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Listener;
 
@@ -19,9 +27,9 @@ class CrontabListener extends InstrumentationListener implements ListenerInterfa
 
     public function process(object $event): void
     {
-        match($event::class) {
+        match ($event::class) {
             AfterExecute::class => $this->onAfterExecute($event),
-            default             => null,
+            default => null,
         };
     }
 

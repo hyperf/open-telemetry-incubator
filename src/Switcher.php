@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry;
 
@@ -17,8 +25,6 @@ class Switcher
 
     /**
      * Check if the instrumentation is enabled.
-     *
-     * @return bool
      */
     public function isEnabled(): bool
     {
@@ -27,13 +33,10 @@ class Switcher
 
     /**
      * Check if the tracing is enabled.
-     *
-     * @param ?string $key
-     * @return bool
      */
     public function isTracingEnabled(?string $key = null): bool
     {
-        if (null === $key) {
+        if ($key === null) {
             return $this->instrumentation->tracer()->isEnabled()
                     && $this->isEnabled()
                     && $this->config->get('open-telemetry.instrumentation.tracing', true);

@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Listener;
 
@@ -9,15 +17,16 @@ use Hyperf\Contract\ContainerInterface;
 use Hyperf\OpenTelemetry\Concerns\SpanRecordThrowable;
 use Hyperf\OpenTelemetry\Switcher;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class InstrumentationListener.
  *
- * @package Hyperf\OpenTelemetry\Listener
- * @property-read ConfigInterface $config
- * @property-read ContainerInterface $container
- * @property-read CachedInstrumentation $instrumentation
- * @property-read Switcher $switcher
+ * @property ConfigInterface $config
+ * @property ContainerInterface $container
+ * @property CachedInstrumentation $instrumentation
+ * @property Switcher $switcher
  */
 abstract class InstrumentationListener
 {
@@ -28,8 +37,8 @@ abstract class InstrumentationListener
     /**
      * InstrumentationListener constructor.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct(
         protected readonly ContainerInterface $container,
