@@ -3,13 +3,13 @@
 ## Installation
 
 ```bash
-composer require hyperf-contrib/open-telemetry
+composer require hyperf/open-telemetry-incubator
 ```
 
 publish config file
 
 ```bash
-php bin/hyperf.php vendor:publish hyperf-contrib/open-telemetry
+php bin/hyperf.php vendor:publish hyperf/open-telemetry-incubator
 ```
 
 ## License
