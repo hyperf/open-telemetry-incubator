@@ -58,6 +58,7 @@
   "config": {
     "sort-packages": true,
     "allow-plugins": {
+      "pestphp/pest-plugin": true,
       "php-http/discovery": false,
       "tbachert/spi": false
     }
