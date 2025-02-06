@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Aspect;
 
@@ -17,6 +25,7 @@ use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class GuzzleClientAspect extends AbstractAspect
 {
@@ -25,9 +34,9 @@ class GuzzleClientAspect extends AbstractAspect
     ];
 
     /**
-     * @throws \Throwable
-     * @throws Exception
      * @return mixed|ResponseInterface
+     * @throws Throwable
+     * @throws Exception
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
@@ -41,7 +50,7 @@ class GuzzleClientAspect extends AbstractAspect
          * @var RequestInterface $request
          */
         $request = $proceedingJoinPoint->arguments['keys']['request'];
-        $method  = $request->getMethod();
+        $method = $request->getMethod();
 
         // request
         $span = $this->instrumentation->tracer()
@@ -57,13 +66,13 @@ class GuzzleClientAspect extends AbstractAspect
         if ($request instanceof RequestInterface) {
             $span->setAttributes([
                 TraceAttributes::HTTP_REQUEST_METHOD => $method,
-                TraceAttributes::URL_FULL            => (string) $request->getUri(),
-                TraceAttributes::URL_PATH            => $request->getUri()->getPath(),
-                TraceAttributes::URL_SCHEME          => $request->getUri()->getScheme(),
-                TraceAttributes::SERVER_ADDRESS      => $request->getUri()->getHost(),
-                TraceAttributes::SERVER_PORT         => $request->getUri()->getPort(),
+                TraceAttributes::URL_FULL => (string) $request->getUri(),
+                TraceAttributes::URL_PATH => $request->getUri()->getPath(),
+                TraceAttributes::URL_SCHEME => $request->getUri()->getScheme(),
+                TraceAttributes::SERVER_ADDRESS => $request->getUri()->getHost(),
+                TraceAttributes::SERVER_PORT => $request->getUri()->getPort(),
                 TraceAttributes::USER_AGENT_ORIGINAL => $request->getHeaderLine('User-Agent'),
-                TraceAttributes::URL_QUERY           => $request->getUri()->getQuery(),
+                TraceAttributes::URL_QUERY => $request->getUri()->getQuery(),
                 ...$this->transformHeaders('request', $request->getHeaders()),
             ]);
         }
@@ -84,7 +93,7 @@ class GuzzleClientAspect extends AbstractAspect
 
                     return $response;
                 },
-                onRejected: function (\Throwable $t) use ($span) {
+                onRejected: function (Throwable $t) use ($span) {
                     $this->spanRecordException($span, $t);
                     $span->end();
 

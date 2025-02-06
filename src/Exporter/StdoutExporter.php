@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Exporter;
 
@@ -22,6 +30,8 @@ use OpenTelemetry\SDK\Sdk;
 use OpenTelemetry\SDK\Trace\SpanExporter\ConsoleSpanExporterFactory;
 use OpenTelemetry\SDK\Trace\SpanProcessorFactory;
 use OpenTelemetry\SDK\Trace\TracerProvider;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * todo: Implement the OpenTelemetry exporter.
@@ -31,8 +41,8 @@ class StdoutExporter implements ExporterInterface
     protected ConfigInterface $config;
 
     /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __construct(
         protected readonly ContainerInterface $container,
@@ -50,7 +60,7 @@ class StdoutExporter implements ExporterInterface
         $logExporter = new LogsExporter(
             (new OtlpHttpTransportFactory())->create(
                 endpoint: $this->config->get('open-telemetry.exporter.otlp.endpoint') . '/v1/logs',
-                contentType:  'application/x-protobuf',
+                contentType: 'application/x-protobuf',
                 compression: TransportFactoryInterface::COMPRESSION_GZIP,
             )
         );

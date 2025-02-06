@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Tests;
 
@@ -25,22 +33,27 @@ use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
 use OpenTelemetry\SDK\Trace\TracerProvider;
 use OpenTelemetry\SemConv\Version;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 abstract class TestCase extends BaseTestCase
 {
     use RunTestsInCoroutine;
 
-    /** @var ArrayObject<int, ImmutableSpan> $storage */
+    /** @var ArrayObject<int, ImmutableSpan> */
     protected ArrayObject $storage;
+
     protected TracerProvider $tracerProvider;
+
     protected LoggerProvider $loggerProvider;
+
     protected ScopeInterface $scope;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->storage        = new ArrayObject();
+        $this->storage = new ArrayObject();
         $this->tracerProvider = new TracerProvider(
             new SimpleSpanProcessor(
                 new SpanInMemoryExporter($this->storage),
@@ -71,9 +84,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param array<string, mixed> $config
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @return \Hyperf\Contract\ContainerInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function getContainer(array $config): ContainerInterface
     {

@@ -1,16 +1,24 @@
 <?php
 
 declare(strict_types=1);
-
-use function Hyperf\Support\env;
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 use OpenTelemetry\SDK\Trace\Sampler\AlwaysOnSampler;
 use OpenTelemetry\SemConv\ResourceAttributes;
+
+use function Hyperf\Support\env;
 
 return [
     // The OpenTelemetry SDK will use this service resource to identify the service.
     'resource' => [
-        ResourceAttributes::SERVICE_NAMESPACE           => env('APP_NAMESPACE', 'hyperf-contrib'),
-        ResourceAttributes::SERVICE_NAME                => env('APP_NAME', 'hyperf-app'),
+        ResourceAttributes::SERVICE_NAMESPACE => env('APP_NAMESPACE', 'hyperf-contrib'),
+        ResourceAttributes::SERVICE_NAME => env('APP_NAME', 'hyperf-app'),
         ResourceAttributes::DEPLOYMENT_ENVIRONMENT_NAME => env('APP_ENV', 'production'),
     ],
 
@@ -43,7 +51,7 @@ return [
             'client_request' => ['enabled' => env('OTEL_INSTRUMENTATION_FEATURES_CLIENT_REQUEST', true), 'options' => [
                 // headers whitelist, supports wildcards，e.g. ['x-custom-*']
                 'headers' => [
-                    'request'  => ['*'],
+                    'request' => ['*'],
                     'response' => ['*'],
                 ],
             ]],
@@ -53,10 +61,10 @@ return [
             ]],
             'command' => ['enabled' => env('OTEL_INSTRUMENTATION_FEATURES_COMMAND', true), 'options' => []],
             'crontab' => ['enabled' => env('OTEL_INSTRUMENTATION_FEATURES_CRONTAB', true), 'options' => []],
-            'guzzle'  => ['enabled' => env('OTEL_INSTRUMENTATION_FEATURES_GUZZLE', true), 'options' => [
+            'guzzle' => ['enabled' => env('OTEL_INSTRUMENTATION_FEATURES_GUZZLE', true), 'options' => [
                 // headers whitelist, supports wildcards，e.g. ['x-custom-*']
                 'headers' => [
-                    'request'  => ['*'],
+                    'request' => ['*'],
                     'response' => ['*'],
                 ],
             ]],

@@ -1,6 +1,14 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Tests\Listener;
 
@@ -14,14 +22,20 @@ use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SDK\Trace\ImmutableSpan;
 use OpenTelemetry\SDK\Trace\StatusData;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class DbQueryExecutedListenerTest extends TestCase
 {
     /**
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
      */
-    public function test_db_query(): void
+    public function testDbQuery(): void
     {
         $container = $this->getContainer($this->getConfig());
 
@@ -62,9 +76,9 @@ class DbQueryExecutedListenerTest extends TestCase
     protected function getConnection(): Connection
     {
         return Mockery::mock(Connection::class, [
-            'getDriverName'   => 'mysql',
+            'getDriverName' => 'mysql',
             'getDatabaseName' => 'hyperf',
-            'getName'         => 'default',
+            'getName' => 'default',
         ])
             ->shouldReceive('getConfig')->with('username')->andReturn('root')
             ->shouldReceive('getConfig')->with('host')->andReturn('localhost')
@@ -77,8 +91,8 @@ class DbQueryExecutedListenerTest extends TestCase
         return [
             'open-telemetry' => [
                 'instrumentation' => [
-                    'enabled'  => true,
-                    'tracing'  => true,
+                    'enabled' => true,
+                    'tracing' => true,
                     'features' => [
                         'db_query' => [
                             'enabled' => true,
