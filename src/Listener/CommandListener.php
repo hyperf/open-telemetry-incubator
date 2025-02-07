@@ -89,8 +89,6 @@ class CommandListener extends InstrumentationListener implements ListenerInterfa
         // status
         if (($e = $event->getThrowable()) !== null) {
             $this->spanRecordException($span, $e);
-        } else {
-            $span->setStatus(StatusCode::STATUS_OK);
         }
     }
 }
