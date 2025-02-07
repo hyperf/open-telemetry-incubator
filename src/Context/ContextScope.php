@@ -1,12 +1,21 @@
 <?php
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Context;
 
 use OpenTelemetry\Context\ContextInterface;
 use OpenTelemetry\Context\ContextStorageScopeInterface;
 use OpenTelemetry\Context\ScopeInterface;
+use ReturnTypeWillChange;
 
 /**
  * @internal
@@ -14,6 +23,7 @@ use OpenTelemetry\Context\ScopeInterface;
 final class ContextScope implements ScopeInterface, ContextStorageScopeInterface
 {
     private ContextStorageScopeInterface $scope;
+
     private ContextHandler $handler;
 
     public function __construct(ContextStorageScopeInterface $scope, ContextHandler $handler)
@@ -30,7 +40,7 @@ final class ContextScope implements ScopeInterface, ContextStorageScopeInterface
     /**
      * @phan-suppress PhanUndeclaredClassAttribute
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->scope->offsetGet($offset);

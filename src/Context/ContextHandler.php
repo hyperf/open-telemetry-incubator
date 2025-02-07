@@ -3,6 +3,14 @@
 /** @noinspection PhpComposerExtensionStubsInspection */
 
 declare(strict_types=1);
+/**
+ * This file is part of Hyperf.
+ *
+ * @link     https://www.hyperf.io
+ * @document https://hyperf.wiki
+ * @contact  group@hyperf.io
+ * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
+ */
 
 namespace Hyperf\OpenTelemetry\Context;
 
@@ -27,9 +35,8 @@ final class ContextHandler
     public function switchToActiveCoroutine(): void
     {
         $cid = Coroutine::getCid();
-        if ($cid !== -1 && !$this->isForked($cid)) {
-            for ($pcid = $cid; ($pcid = Coroutine::getPcid($pcid)) !== -1 && Coroutine::exists($pcid) && !$this->isForked($pcid);) {
-            }
+        if ($cid !== -1 && ! $this->isForked($cid)) {
+            for ($pcid = $cid; ($pcid = Coroutine::getPcid($pcid)) !== -1 && Coroutine::exists($pcid) && ! $this->isForked($pcid););
 
             $this->storage->switch($pcid);
             $this->forkCoroutine($cid);
@@ -42,7 +49,7 @@ final class ContextHandler
     {
         $pcid = Coroutine::getCid();
         foreach (method_exists(Coroutine::class, 'list') ? Coroutine::list() : Coroutine::listCoroutines() as $cid) {
-            if ($pcid === Coroutine::getPcid($cid) && !$this->isForked($cid)) {
+            if ($pcid === Coroutine::getPcid($cid) && ! $this->isForked($cid)) {
                 $this->forkCoroutine($cid);
             }
         }

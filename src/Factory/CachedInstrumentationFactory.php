@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace Hyperf\OpenTelemetry\Factory;
 
 use Hyperf\Contract\ContainerInterface;
+use Hyperf\OpenTelemetry\Context\ContextStorage as CtxStorage;
 use Hyperf\OpenTelemetry\Contract\ExporterInterface;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\Context\ContextStorage;
-use OpenTelemetry\Contrib\Context\Swoole\SwooleContextStorage;
 use OpenTelemetry\SemConv\Version;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -30,7 +30,7 @@ class CachedInstrumentationFactory
      */
     public function __invoke(ContainerInterface $container): CachedInstrumentation
     {
-        Context::setStorage(new SwooleContextStorage(new ContextStorage()));
+        Context::setStorage(new CtxStorage(new ContextStorage()));
 
         $container->get(ExporterInterface::class)->configure();
 
