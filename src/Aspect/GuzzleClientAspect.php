@@ -15,7 +15,6 @@ namespace Hyperf\OpenTelemetry\Aspect;
 use GuzzleHttp\Client;
 use GuzzleHttp\TransferStats;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
-use Hyperf\Di\Exception\Exception;
 use Hyperf\OpenTelemetry\Propagator\HeadersPropagator;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
@@ -23,7 +22,6 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
-use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class GuzzleClientAspect extends AbstractAspect
@@ -31,7 +29,6 @@ class GuzzleClientAspect extends AbstractAspect
     public array $classes = [
         Client::class . '::transfer',
     ];
-
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
