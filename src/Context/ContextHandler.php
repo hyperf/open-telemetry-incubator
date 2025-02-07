@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Hyperf\OpenTelemetry\Context;
 
+use Hyperf\Context\Context;
+use Hyperf\Coroutine\Coroutine as Co;
 use OpenTelemetry\Context\ExecutionContextAwareInterface;
 use Swoole\Coroutine;
 
@@ -34,9 +36,9 @@ final class ContextHandler
 
     public function switchToActiveCoroutine(): void
     {
-        $cid = Coroutine::getCid();
+        $cid = Co::id();
         if ($cid !== -1 && ! $this->isForked($cid)) {
-            for ($pcid = $cid; ($pcid = Coroutine::getPcid($pcid)) !== -1 && Coroutine::exists($pcid) && ! $this->isForked($pcid););
+            for ($pcid = $cid; ($pcid = Co::pid($pcid)) !== -1 && Co::exists($pcid) && ! $this->isForked($pcid););
 
             $this->storage->switch($pcid);
             $this->forkCoroutine($cid);
@@ -47,9 +49,9 @@ final class ContextHandler
 
     public function splitOffChildCoroutines(): void
     {
-        $pcid = Coroutine::getCid();
+        $pcid = Co::id();
         foreach (method_exists(Coroutine::class, 'list') ? Coroutine::list() : Coroutine::listCoroutines() as $cid) {
-            if ($pcid === Coroutine::getPcid($cid) && ! $this->isForked($cid)) {
+            if ($pcid === Co::pid($cid) && ! $this->isForked($cid)) {
                 $this->forkCoroutine($cid);
             }
         }
@@ -57,12 +59,12 @@ final class ContextHandler
 
     private function isForked(int $cid): bool
     {
-        return isset(Coroutine::getContext($cid)[__CLASS__]);
+        return Context::has(__CLASS__, $cid);
     }
 
     private function forkCoroutine(int $cid): void
     {
         $this->storage->fork($cid);
-        Coroutine::getContext($cid)[__CLASS__] = new ContextDestructor($this->storage, $cid);
+        Context::set(__CLASS__, new ContextDestructor($this->storage, $cid), $cid);
     }
 }
