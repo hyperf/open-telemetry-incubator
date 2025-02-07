@@ -14,7 +14,6 @@ namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Collection\Arr;
 use Hyperf\Database\Events\QueryExecuted;
-use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SemConv\TraceAttributes;
@@ -67,7 +66,7 @@ class DbQueryExecutedListener extends InstrumentationListener
         ]);
 
         if ($event->result instanceof Throwable) {
-            $this->spanRecordException($span, $event->result);
+            $this->recordException($span, $event->result);
         }
 
         $span->end();

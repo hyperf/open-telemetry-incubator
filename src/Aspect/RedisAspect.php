@@ -17,7 +17,6 @@ use Hyperf\Di\Exception\Exception;
 use Hyperf\Redis\Redis;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Throwable;
 
@@ -60,7 +59,7 @@ class RedisAspect extends AbstractAspect
         try {
             $result = $proceedingJoinPoint->process();
         } catch (Throwable $e) {
-            $this->spanRecordException($span, $e);
+            $this->recordException($span, $e);
 
             throw $e;
         } finally {

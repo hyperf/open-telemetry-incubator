@@ -13,19 +13,17 @@ declare(strict_types=1);
 namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\OpenTelemetry\Concerns\SpanRecordThrowable;
+use Hyperf\OpenTelemetry\Concerns\InteractsWithSpan;
 use Hyperf\OpenTelemetry\Switcher;
 use Hyperf\Redis\Event\CommandExecuted;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
 
 class RedisCommandExecutedListener extends InstrumentationListener
 {
-    use SpanRecordThrowable;
+    use InteractsWithSpan;
 
     public function __construct(
         protected readonly ConfigInterface $config,
@@ -70,7 +68,7 @@ class RedisCommandExecutedListener extends InstrumentationListener
         ]);
 
         if ($event->throwable) {
-            $this->spanRecordException($span, $event->throwable);
+            $this->recordException($span, $event->throwable);
         }
 
         $span->end();

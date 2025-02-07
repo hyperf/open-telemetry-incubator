@@ -17,12 +17,12 @@ use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Throwable;
 
-trait SpanRecordThrowable
+trait InteractsWithSpan
 {
     /**
      * Record exception to span.
      */
-    protected function spanRecordException(SpanInterface $span, ?Throwable $e = null): void
+    protected function recordException(SpanInterface $span, ?Throwable $e = null): void
     {
         if ($e === null) {
             return;

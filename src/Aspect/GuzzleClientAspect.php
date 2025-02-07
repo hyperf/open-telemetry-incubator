@@ -94,7 +94,7 @@ class GuzzleClientAspect extends AbstractAspect
                     return $response;
                 },
                 onRejected: function (Throwable $t) use ($span) {
-                    $this->spanRecordException($span, $t);
+                    $this->recordException($span, $t);
                     $span->end();
 
                     throw $t;

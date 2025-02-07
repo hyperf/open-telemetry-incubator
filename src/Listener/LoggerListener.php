@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Hyperf\OpenTelemetry\Listener;
 
-use Hyperf\Event\Contract\ListenerInterface;
-
 class LoggerListener extends InstrumentationListener
 {
     public function listen(): array

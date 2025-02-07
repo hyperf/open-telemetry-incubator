@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Hyperf\OpenTelemetry\Listener;
 
-use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\HttpServer\Event\RequestReceived;
 use Hyperf\HttpServer\Event\RequestTerminated;
 use Hyperf\Stringable\Str;
@@ -91,7 +90,7 @@ class ClientRequestListener extends InstrumentationListener
             ...$this->transformHeaders('response', $event->response->getHeaders()),
         ]);
 
-        $this->spanRecordException($span, $event->getThrowable());
+        $this->recordException($span, $event->getThrowable());
 
         $span->end();
         $scope->detach();

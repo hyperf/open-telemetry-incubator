@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Crontab\Event\AfterExecute;
-use Hyperf\Event\Contract\ListenerInterface;
 use OpenTelemetry\API\Trace\SpanKind;
 
 class CrontabListener extends InstrumentationListener
