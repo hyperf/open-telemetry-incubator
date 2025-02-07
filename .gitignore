@@ -9,3 +9,4 @@ vendor/
 *.lock
 .DS_Store
 .git/
+.bashrc

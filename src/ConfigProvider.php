@@ -31,10 +31,11 @@ class ConfigProvider
                 ResourceInfo::class => Factory\OTelResourceFactory::class,
             ],
             'listeners' => [
-                Listener\DbQueryExecutedListener::class,
                 Listener\ClientRequestListener::class,
                 Listener\CommandListener::class,
                 Listener\CrontabListener::class,
+                Listener\DbQueryExecutedListener::class,
+                Listener\RedisCommandExecutedListener::class,
             ],
             'aspects' => [
                 Aspect\RedisAspect::class,
