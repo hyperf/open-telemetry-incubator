@@ -58,7 +58,7 @@ class GuzzleClientAspect extends AbstractAspect
 
             // request
             $span->setAttributes([
-                TraceAttributes::HTTP_REQUEST_METHOD => strtolower($request->getMethod()),
+                TraceAttributes::HTTP_REQUEST_METHOD => strtoupper($request->getMethod()),
                 TraceAttributes::URL_FULL => (string) $request->getUri(),
                 TraceAttributes::URL_PATH => $request->getUri()->getPath(),
                 TraceAttributes::URL_SCHEME => $request->getUri()->getScheme(),
