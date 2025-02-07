@@ -59,7 +59,6 @@ class RedisAspect extends AbstractAspect
 
         try {
             $result = $proceedingJoinPoint->process();
-            $span->setStatus(StatusCode::STATUS_OK);
         } catch (Throwable $e) {
             $this->spanRecordException($span, $e);
 
