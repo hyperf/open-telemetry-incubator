@@ -71,8 +71,6 @@ class RedisCommandExecutedListener implements ListenerInterface
 
         if ($event->throwable) {
             $this->spanRecordException($span, $event->throwable);
-        } else {
-            $span->setStatus(StatusCode::STATUS_OK);
         }
 
         $span->end();
