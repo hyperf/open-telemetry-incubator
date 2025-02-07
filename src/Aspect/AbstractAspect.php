@@ -15,7 +15,7 @@ namespace Hyperf\OpenTelemetry\Aspect;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Aop\AbstractAspect as BaseAbstractAspect;
-use Hyperf\OpenTelemetry\Concerns\SpanRecordThrowable;
+use Hyperf\OpenTelemetry\Concerns\InteractsWithSpan;
 use Hyperf\OpenTelemetry\Switcher;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
 use Psr\Container\ContainerExceptionInterface;
@@ -23,7 +23,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 abstract class AbstractAspect extends BaseAbstractAspect
 {
-    use SpanRecordThrowable;
+    use InteractsWithSpan;
 
     protected readonly ConfigInterface $config;
 

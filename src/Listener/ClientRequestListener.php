@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace Hyperf\OpenTelemetry\Listener;
 
-use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\HttpServer\Event\RequestReceived;
 use Hyperf\HttpServer\Event\RequestTerminated;
 use Hyperf\Stringable\Str;
@@ -23,7 +22,7 @@ use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ClientRequestListener extends InstrumentationListener implements ListenerInterface
+class ClientRequestListener extends InstrumentationListener
 {
     public function listen(): array
     {
@@ -91,7 +90,7 @@ class ClientRequestListener extends InstrumentationListener implements ListenerI
             ...$this->transformHeaders('response', $event->response->getHeaders()),
         ]);
 
-        $this->spanRecordException($span, $event->getThrowable());
+        $this->recordException($span, $event->getThrowable());
 
         $span->end();
         $scope->detach();

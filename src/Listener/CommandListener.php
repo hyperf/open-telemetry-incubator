@@ -15,16 +15,14 @@ namespace Hyperf\OpenTelemetry\Listener;
 use Carbon\Carbon;
 use Hyperf\Command\Event\AfterExecute;
 use Hyperf\Command\Event\BeforeHandle;
-use Hyperf\Event\Contract\ListenerInterface;
 use OpenTelemetry\API\Trace\Span;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
 
 use function Hyperf\Coroutine\defer;
 
-class CommandListener extends InstrumentationListener implements ListenerInterface
+class CommandListener extends InstrumentationListener
 {
     public function listen(): array
     {
@@ -88,9 +86,7 @@ class CommandListener extends InstrumentationListener implements ListenerInterfa
 
         // status
         if (($e = $event->getThrowable()) !== null) {
-            $this->spanRecordException($span, $e);
-        } else {
-            $span->setStatus(StatusCode::STATUS_OK);
+            $this->recordException($span, $e);
         }
     }
 }

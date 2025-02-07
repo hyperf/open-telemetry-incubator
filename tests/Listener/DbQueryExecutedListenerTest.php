@@ -63,12 +63,12 @@ class DbQueryExecutedListenerTest extends TestCase
 
         // attributes
         $attributes = $span->getAttributes();
-        $this->assertSame('mysql', $attributes->get('db.system'));
+        $this->assertSame('mysql', $attributes->get('db.system.name'));
         $this->assertSame('hyperf', $attributes->get('db.namespace'));
         $this->assertSame('SELECT', $attributes->get('db.operation.name'));
         $this->assertSame('root', $attributes->get('db.user'));
         $this->assertSame('select * from `users` where `id` = ?', $attributes->get('db.query.text'));
-        $this->assertSame('select * from `users` where `id` = ?', $attributes->get('db.statement'));
+        // $this->assertSame('select * from `users` where `id` = ?', $attributes->get('db.statement'));
         $this->assertSame('localhost', $attributes->get('server.address'));
         $this->assertSame(3306, $attributes->get('server.port'));
     }

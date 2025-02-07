@@ -17,7 +17,6 @@ use Hyperf\Di\Exception\Exception;
 use Hyperf\Redis\Redis;
 use Hyperf\Stringable\Str;
 use OpenTelemetry\API\Trace\SpanKind;
-use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Throwable;
 
@@ -33,7 +32,10 @@ class RedisAspect extends AbstractAspect
      */
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
-        if ($this->switcher->isTracingEnabled('redis') === false) {
+        if (
+            class_exists('Hyperf\Redis\Event\CommandExecuted')
+            || ! $this->switcher->isTracingEnabled('redis')
+        ) {
             return $proceedingJoinPoint->process();
         }
 
@@ -48,18 +50,16 @@ class RedisAspect extends AbstractAspect
 
         // todo: add more attributes
         $span->setAttributes([
-            TraceAttributes::DB_SYSTEM => 'redis',
+            TraceAttributes::DB_SYSTEM_NAME => 'redis',
             TraceAttributes::DB_OPERATION_NAME => Str::upper($command),
             TraceAttributes::DB_QUERY_TEXT => $commandFull,
-            TraceAttributes::DB_STATEMENT => $commandFull,
             'hyperf.redis.pool' => $poolName,
         ]);
 
         try {
             $result = $proceedingJoinPoint->process();
-            $span->setStatus(StatusCode::STATUS_OK);
         } catch (Throwable $e) {
-            $this->spanRecordException($span, $e);
+            $this->recordException($span, $e);
 
             throw $e;
         } finally {
