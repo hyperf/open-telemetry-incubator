@@ -35,10 +35,10 @@ class CachedInstrumentationFactory
         $container->get(ExporterInterface::class)->configure();
 
         return new CachedInstrumentation(
-            name: 'hyperf-contrib/open-telemetry',
+            name: 'hyperf/open-telemetry',
             schemaUrl: Version::VERSION_1_27_0->url(),
             attributes: [
-                'instrumentation.name' => 'hyperf-contrib/open-telemetry',
+                'instrumentation.name' => 'hyperf/open-telemetry',
             ],
         );
     }
