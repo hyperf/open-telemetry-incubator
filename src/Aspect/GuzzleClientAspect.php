@@ -22,6 +22,7 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
+use Psr\Http\Message\RequestInterface;
 use Throwable;
 
 class GuzzleClientAspect extends AbstractAspect
@@ -36,27 +37,28 @@ class GuzzleClientAspect extends AbstractAspect
             return $proceedingJoinPoint->process();
         }
 
+        /** @var RequestInterface $request */
+        $request = $proceedingJoinPoint->arguments['keys']['request'];
+        $parentContext = Context::getCurrent();
+        $span = $this->instrumentation->tracer()
+            ->spanBuilder($request->getMethod() . ' ' . $request->getUri()->getPath())
+            ->setParent($parentContext)
+            ->setSpanKind(SpanKind::KIND_CLIENT)
+            ->startSpan();
+
+        $context = $span->storeInContext($parentContext);
+
+        TraceContextPropagator::getInstance()->inject($request, HeadersPropagator::instance(), $context);
+
         $onStats = $proceedingJoinPoint->arguments['keys']['options']['on_stats'] ?? null;
 
-        $proceedingJoinPoint->arguments['keys']['options']['on_stats'] = function (TransferStats $stats) use ($onStats) {
+        $proceedingJoinPoint->arguments['keys']['options']['on_stats'] = function (TransferStats $stats) use ($span, $onStats) {
             $request = $stats->getRequest();
             $response = $stats->getResponse();
-            $method = $request->getMethod();
 
             // request
-            $parentContext = Context::getCurrent();
-            $span = $this->instrumentation->tracer()
-                ->spanBuilder($method . ' ' . $request->getUri()->getPath())
-                ->setParent($parentContext)
-                ->setSpanKind(SpanKind::KIND_CLIENT)
-                ->startSpan();
-
-            $context = $span->storeInContext($parentContext);
-
-            TraceContextPropagator::getInstance()->inject($request, HeadersPropagator::instance(), $context);
-
             $span->setAttributes([
-                TraceAttributes::HTTP_REQUEST_METHOD => $method,
+                TraceAttributes::HTTP_REQUEST_METHOD => strtoupper($request->getMethod()),
                 TraceAttributes::URL_FULL => (string) $request->getUri(),
                 TraceAttributes::URL_PATH => $request->getUri()->getPath(),
                 TraceAttributes::URL_SCHEME => $request->getUri()->getScheme(),
