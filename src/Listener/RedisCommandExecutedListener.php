@@ -23,7 +23,7 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\API\Trace\StatusCode;
 use OpenTelemetry\SemConv\TraceAttributes;
 
-class RedisCommandExecutedListener implements ListenerInterface
+class RedisCommandExecutedListener extends InstrumentationListener
 {
     use SpanRecordThrowable;
 

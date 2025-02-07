@@ -20,7 +20,7 @@ use OpenTelemetry\API\Trace\SpanKind;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Throwable;
 
-class DbQueryExecutedListener extends InstrumentationListener implements ListenerInterface
+class DbQueryExecutedListener extends InstrumentationListener
 {
     public function listen(): array
     {
@@ -57,12 +57,11 @@ class DbQueryExecutedListener extends InstrumentationListener implements Listene
             ->startSpan();
 
         $span->setAttributes([
-            TraceAttributes::DB_SYSTEM => $event->connection->getDriverName(),
+            TraceAttributes::DB_SYSTEM_NAME => $event->connection->getDriverName(),
             TraceAttributes::DB_NAMESPACE => $event->connection->getDatabaseName(),
             TraceAttributes::DB_OPERATION_NAME => Str::upper(Str::before($event->sql, ' ')),
             TraceAttributes::DB_USER => $event->connection->getConfig('username'),
             TraceAttributes::DB_QUERY_TEXT => $sql,
-            TraceAttributes::DB_STATEMENT => $sql,
             TraceAttributes::SERVER_ADDRESS => $event->connection->getConfig('host'),
             TraceAttributes::SERVER_PORT => $event->connection->getConfig('port'),
         ]);

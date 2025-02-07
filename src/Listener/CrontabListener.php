@@ -16,7 +16,7 @@ use Hyperf\Crontab\Event\AfterExecute;
 use Hyperf\Event\Contract\ListenerInterface;
 use OpenTelemetry\API\Trace\SpanKind;
 
-class CrontabListener extends InstrumentationListener implements ListenerInterface
+class CrontabListener extends InstrumentationListener
 {
     public function listen(): array
     {

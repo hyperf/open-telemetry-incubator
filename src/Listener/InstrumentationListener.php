@@ -14,6 +14,7 @@ namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
+use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\OpenTelemetry\Concerns\SpanRecordThrowable;
 use Hyperf\OpenTelemetry\Switcher;
 use OpenTelemetry\API\Instrumentation\CachedInstrumentation;
@@ -28,7 +29,7 @@ use Psr\Container\NotFoundExceptionInterface;
  * @property CachedInstrumentation $instrumentation
  * @property Switcher $switcher
  */
-abstract class InstrumentationListener
+abstract class InstrumentationListener implements ListenerInterface
 {
     use SpanRecordThrowable;
 

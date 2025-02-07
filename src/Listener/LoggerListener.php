@@ -14,7 +14,7 @@ namespace Hyperf\OpenTelemetry\Listener;
 
 use Hyperf\Event\Contract\ListenerInterface;
 
-class LoggerListener extends InstrumentationListener implements ListenerInterface
+class LoggerListener extends InstrumentationListener
 {
     public function listen(): array
     {

@@ -24,7 +24,7 @@ use OpenTelemetry\SemConv\TraceAttributes;
 
 use function Hyperf\Coroutine\defer;
 
-class CommandListener extends InstrumentationListener implements ListenerInterface
+class CommandListener extends InstrumentationListener
 {
     public function listen(): array
     {

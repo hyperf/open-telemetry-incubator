@@ -23,7 +23,7 @@ use OpenTelemetry\Context\Context;
 use OpenTelemetry\SemConv\TraceAttributes;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ClientRequestListener extends InstrumentationListener implements ListenerInterface
+class ClientRequestListener extends InstrumentationListener
 {
     public function listen(): array
     {
