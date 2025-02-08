@@ -52,7 +52,7 @@ class OtlpExporter implements ExporterInterface
 
     public function configure(): void
     {
-        $endpoint = $this->config->get('open-telemetry.exporter.otlp.endpoint', 'http://localhost:4318');
+        $endpoint = $this->config->get('opentelemetry.exporter.otlp.endpoint', 'http://localhost:4318');
 
         $spanExporter = new SpanExporter(
             (new OtlpHttpTransportFactory())->create(
@@ -99,7 +99,7 @@ class OtlpExporter implements ExporterInterface
                 )
             )
             ->setResource($this->resource)
-            ->setSampler($this->config->get('open-telemetry.sampler', new ParentBased(new AlwaysOnSampler())))
+            ->setSampler($this->config->get('opentelemetry.sampler', new ParentBased(new AlwaysOnSampler())))
             ->build();
 
         $loggerProvider = LoggerProvider::builder()

@@ -45,8 +45,8 @@ class ConfigProvider
                 [
                     'id' => 'config',
                     'description' => 'The config for OpenTelemetry.',
-                    'source' => __DIR__ . '/../publish/open-telemetry.php',
-                    'destination' => BASE_PATH . '/config/autoload/open-telemetry.php',
+                    'source' => __DIR__ . '/../publish/opentelemetry.php',
+                    'destination' => BASE_PATH . '/config/autoload/opentelemetry.php',
                 ],
             ],
         ];

@@ -32,7 +32,7 @@ class OTelResourceFactory
         $config = $container->get(ConfigInterface::class);
 
         return ResourceInfoFactory::defaultResource()->merge(ResourceInfo::create(Attributes::create(
-            $config->get('open-telemetry.resource', [
+            $config->get('opentelemetry.resource', [
                 ResourceAttributes::SERVICE_NAME => $config->get('app_name'),
                 ResourceAttributes::DEPLOYMENT_ENVIRONMENT_NAME => $config->get('app_env'),
             ])
