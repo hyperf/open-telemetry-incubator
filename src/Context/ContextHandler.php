@@ -74,10 +74,10 @@ final class ContextHandler
      */
     private function listCoroutines(): iterable
     {
-        return match (true) {
+        match (true) {
             class_exists(SwooleCoroutine::class) => yield from SwooleCoroutine::list(),
             class_exists(SwowCoroutine::class) => yield from array_map(fn ($c) => (int) $c->getId(), SwowCoroutine::getAll()),
-            default => [],
+            default => yield from [],
         };
     }
 }
