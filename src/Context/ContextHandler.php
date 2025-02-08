@@ -17,7 +17,8 @@ namespace Hyperf\OpenTelemetry\Context;
 use Hyperf\Context\Context;
 use Hyperf\Coroutine\Coroutine as Co;
 use OpenTelemetry\Context\ExecutionContextAwareInterface;
-use Swoole\Coroutine;
+use Swoole\Coroutine as SwooleCoroutine;
+use Swow\Coroutine as SwowCoroutine;
 
 /**
  * @internal
@@ -74,9 +75,9 @@ final class ContextHandler
     private function listCoroutines(): iterable
     {
         return match (true) {
-            class_exists(Coroutine::class) => Coroutine::list(),
-            class_exists(\Swow\Coroutine::class) => (function () {
-                foreach (\Swow\Coroutine::getAll() as $coroutine) { // @phpstan-ignore-line
+            class_exists(SwooleCoroutine::class) => SwooleCoroutine::list(),
+            class_exists(SwowCoroutine::class) => (function () {
+                foreach (SwowCoroutine::getAll() as $coroutine) { // @phpstan-ignore-line
                     yield $coroutine->getId();
                 }
             })(),
