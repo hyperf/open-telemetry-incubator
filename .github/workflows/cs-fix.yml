@@ -14,6 +14,8 @@ jobs:
       matrix:
         php-version: [ 8.1 ]
         platform: [ ubuntu-latest ]
+      max-parallel: 20
+      fail-fast: false
     runs-on: ${{ matrix.platform }}
 
     steps:
