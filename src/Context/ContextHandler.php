@@ -50,7 +50,7 @@ final class ContextHandler
     public function splitOffChildCoroutines(): void
     {
         $pcid = Co::id();
-        foreach (method_exists(Coroutine::class, 'list') ? Coroutine::list() : Coroutine::listCoroutines() as $cid) {
+        foreach ($this->listCoroutines() as $cid) {
             if ($pcid === Co::pid($cid) && ! $this->isForked($cid)) {
                 $this->forkCoroutine($cid);
             }
@@ -66,5 +66,21 @@ final class ContextHandler
     {
         $this->storage->fork($cid);
         Context::set(__CLASS__, new ContextDestructor($this->storage, $cid), $cid);
+    }
+
+    /**
+     * @return iterable<int>
+     */
+    private function listCoroutines(): iterable
+    {
+        return match (true) {
+            class_exists(Coroutine::class) => Coroutine::list(),
+            class_exists(\Swow\Coroutine::class) => (function () {
+                foreach (\Swow\Coroutine::getAll() as $coroutine) { // @phpstan-ignore-line
+                    yield $coroutine->getId();
+                }
+            })(),
+            default => [],
+        };
     }
 }
