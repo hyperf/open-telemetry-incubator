@@ -75,12 +75,8 @@ final class ContextHandler
     private function listCoroutines(): iterable
     {
         return match (true) {
-            class_exists(SwooleCoroutine::class) => SwooleCoroutine::list(),
-            class_exists(SwowCoroutine::class) => (function () {
-                foreach (SwowCoroutine::getAll() as $coroutine) { // @phpstan-ignore-line
-                    yield $coroutine->getId();
-                }
-            })(),
+            class_exists(SwooleCoroutine::class) => yield from SwooleCoroutine::list(),
+            class_exists(SwowCoroutine::class) => yield from array_map(fn ($c) => (int) $c->getId(), SwowCoroutine::getAll()),
             default => [],
         };
     }
