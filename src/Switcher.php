@@ -28,7 +28,7 @@ class Switcher
      */
     public function isEnabled(): bool
     {
-        return $this->config->get('open-telemetry.instrumentation.enabled', true);
+        return $this->config->get('opentelemetry.instrumentation.enabled', true);
     }
 
     /**
@@ -39,10 +39,10 @@ class Switcher
         if ($key === null) {
             return $this->instrumentation->tracer()->isEnabled()
                     && $this->isEnabled()
-                    && $this->config->get('open-telemetry.instrumentation.tracing', true);
+                    && $this->config->get('opentelemetry.instrumentation.tracing', true);
         }
 
         return $this->isTracingEnabled()
-                && $this->config->get("open-telemetry.instrumentation.features.{$key}.enabled", true);
+                && $this->config->get("opentelemetry.instrumentation.features.{$key}.enabled", true);
     }
 }

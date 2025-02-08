@@ -117,7 +117,7 @@ class ClientRequestListener extends InstrumentationListener
 
     private function canTransformHeaders(string $type, string $key): bool
     {
-        $headers = (array) $this->config->get("open-telemetry.instrumentation.features.client_request.options.headers.{$type}", ['*']);
+        $headers = (array) $this->config->get("opentelemetry.instrumentation.features.client_request.options.headers.{$type}", ['*']);
 
         foreach ($headers as $header) {
             if (Str::is(Str::lower($header), $key)) {

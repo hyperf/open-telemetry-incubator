@@ -59,7 +59,7 @@ class StdoutExporter implements ExporterInterface
 
         $logExporter = new LogsExporter(
             (new OtlpHttpTransportFactory())->create(
-                endpoint: $this->config->get('open-telemetry.exporter.otlp.endpoint') . '/v1/logs',
+                endpoint: $this->config->get('opentelemetry.exporter.otlp.endpoint') . '/v1/logs',
                 contentType: 'application/x-protobuf',
                 compression: TransportFactoryInterface::COMPRESSION_GZIP,
             )

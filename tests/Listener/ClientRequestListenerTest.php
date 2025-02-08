@@ -148,7 +148,7 @@ class ClientRequestListenerTest extends TestCase
     protected function getConfig(): array
     {
         return [
-            'open-telemetry' => [
+            'opentelemetry' => [
                 'instrumentation' => [
                     'enabled' => true,
                     'tracing' => true,

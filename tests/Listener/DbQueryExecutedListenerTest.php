@@ -89,7 +89,7 @@ class DbQueryExecutedListenerTest extends TestCase
     private function getConfig(): array
     {
         return [
-            'open-telemetry' => [
+            'opentelemetry' => [
                 'instrumentation' => [
                     'enabled' => true,
                     'tracing' => true,
