@@ -78,6 +78,7 @@ class GuzzleClientAspect extends AbstractAspect
                     $span->setStatus(StatusCode::STATUS_ERROR);
                 }
             }
+            
             if (($t = $stats->getHandlerErrorData()) instanceof Throwable) {
                 $this->recordException($span, $t);
             }
