@@ -17,8 +17,6 @@ namespace Hyperf\OpenTelemetry\Context;
 use Hyperf\Context\Context;
 use Hyperf\Coroutine\Coroutine as Co;
 use OpenTelemetry\Context\ExecutionContextAwareInterface;
-use Swoole\Coroutine as SwooleCoroutine;
-use Swow\Coroutine as SwowCoroutine;
 
 /**
  * @internal
@@ -51,7 +49,7 @@ final class ContextHandler
     public function splitOffChildCoroutines(): void
     {
         $pcid = Co::id();
-        foreach ($this->listCoroutines() as $cid) {
+        foreach (Co::list() as $cid) {
             if ($pcid === Co::pid($cid) && ! $this->isForked($cid)) {
                 $this->forkCoroutine($cid);
             }
@@ -67,17 +65,5 @@ final class ContextHandler
     {
         $this->storage->fork($cid);
         Context::set(__CLASS__, new ContextDestructor($this->storage, $cid), $cid);
-    }
-
-    /**
-     * @return iterable<int>
-     */
-    private function listCoroutines(): iterable
-    {
-        match (true) {
-            class_exists(SwooleCoroutine::class) => yield from SwooleCoroutine::list(),
-            class_exists(SwowCoroutine::class) => yield from array_map(fn ($c) => (int) $c->getId(), SwowCoroutine::getAll()),
-            default => yield from [],
-        };
     }
 }
