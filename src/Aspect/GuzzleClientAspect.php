@@ -53,10 +53,8 @@ class GuzzleClientAspect extends AbstractAspect
         $onStats = $proceedingJoinPoint->arguments['keys']['options']['on_stats'] ?? null;
 
         $proceedingJoinPoint->arguments['keys']['options']['on_stats'] = function (TransferStats $stats) use ($span, $onStats) {
-            $request = $stats->getRequest();
-            $response = $stats->getResponse();
-
             // request
+            $request = $stats->getRequest();
             $span->setAttributes([
                 TraceAttributes::HTTP_REQUEST_METHOD => strtoupper($request->getMethod()),
                 TraceAttributes::URL_FULL => (string) $request->getUri(),
@@ -69,13 +67,16 @@ class GuzzleClientAspect extends AbstractAspect
                 ...$this->transformHeaders('request', $request->getHeaders()),
             ]);
 
-            $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $response->getStatusCode());
-            $span->setAttribute(TraceAttributes::NETWORK_PROTOCOL_VERSION, $response->getProtocolVersion());
-            $span->setAttribute(TraceAttributes::HTTP_RESPONSE_BODY_SIZE, $response->getHeaderLine('Content-Length'));
-            $span->setAttributes($this->transformHeaders('response', $response->getHeaders()));
+            // response
+            if ($response = $stats->getResponse()) {
+                $span->setAttribute(TraceAttributes::HTTP_RESPONSE_STATUS_CODE, $response->getStatusCode());
+                $span->setAttribute(TraceAttributes::NETWORK_PROTOCOL_VERSION, $response->getProtocolVersion());
+                $span->setAttribute(TraceAttributes::HTTP_RESPONSE_BODY_SIZE, $response->getHeaderLine('Content-Length'));
+                $span->setAttributes($this->transformHeaders('response', $response->getHeaders()));
 
-            if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 600) {
-                $span->setStatus(StatusCode::STATUS_ERROR);
+                if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 600) {
+                    $span->setStatus(StatusCode::STATUS_ERROR);
+                }
             }
 
             if (($t = $stats->getHandlerErrorData()) instanceof Throwable) {
