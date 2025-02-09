@@ -17,9 +17,9 @@ use function Hyperf\Support\env;
 return [
     // The OpenTelemetry SDK will use this service resource to identify the service.
     'resource' => [
-        ResourceAttributes::SERVICE_NAMESPACE => env('APP_NAMESPACE', 'hyperf-contrib'),
-        ResourceAttributes::SERVICE_NAME => env('APP_NAME', 'hyperf-app'),
-        ResourceAttributes::DEPLOYMENT_ENVIRONMENT_NAME => env('APP_ENV', 'production'),
+        ResourceAttributes::SERVICE_NAMESPACE => env('APP_NAMESPACE', 'hyperf'),
+        ResourceAttributes::SERVICE_NAME => env('APP_NAME', 'hyperf'),
+        ResourceAttributes::DEPLOYMENT_ENVIRONMENT_NAME => env('APP_ENV', 'prod'),
     ],
 
     // The OpenTelemetry SDK will use this URL to send the spans to the collector.
